@@ -1154,7 +1154,7 @@ public function Registra_oficioRetro_primer_insert_esp_no($datos)
         $conexion = new ConexionSQL();
         $con = $conexion->ObtenerConexionBD();
         $usuario = $_SESSION["ses_rfc_corto"];
-        $filtro = self::valida_sub_admin($nombre_sub_admin);
+        $filtro = self::valida_sub_admin1($nombre_sub_admin);
         if (isset($filtro)) {
             return false;
         }
@@ -1172,12 +1172,35 @@ public function Registra_oficioRetro_primer_insert_esp_no($datos)
         }
       
     }
-    public static function valida_sub_admin($nombre_admin,$id_admin)
+    public static function valida_sub_admin($nombre_sub_admin,$id_admin)
     {
         include_once 'conexion.php';
         $conexion = new ConexionSQL();
         $con = $conexion->ObtenerConexionBD();
-        $query = "SELECT * FROM SubAdmin where nombre_sub_admin like '%$nombre_admin%' and id_admin = $id_admin";
+        $query = "SELECT * FROM SubAdmin where nombre_sub_admin like '%$nombre_sub_admin%' and id_admin = $id_admin";
+        $prepare = sqlsrv_query($con, $query);
+        if ($prepare) {
+            while ($row = sqlsrv_fetch_array($prepare, SQLSRV_FETCH_ASSOC)) {
+                $fila = $row;
+            }
+            if (isset($fila)) {
+                return $fila;
+                $conexion->CerrarConexion($con);
+            } else {
+                return null;
+                $conexion->CerrarConexion($con);
+            }
+        } else {
+            return sqlsrv_errors();
+            $conexion->CerrarConexion($con);
+        }
+    }
+    public static function valida_sub_admin1($nombre_sub_admin)
+    {
+        include_once 'conexion.php';
+        $conexion = new ConexionSQL();
+        $con = $conexion->ObtenerConexionBD();
+        $query = "SELECT * FROM SubAdmin where nombre_sub_admin like '%$nombre_sub_admin%'";
         $prepare = sqlsrv_query($con, $query);
         if ($prepare) {
             while ($row = sqlsrv_fetch_array($prepare, SQLSRV_FETCH_ASSOC)) {
@@ -1422,6 +1445,20 @@ public function Registra_oficioRetro_primer_insert_esp_no($datos)
         $prepare = sqlsrv_query($con, $query);
         if ($prepare == true) {
             return 'Se actualizo Exitosamente';
+            $conexion->CerrarConexion($con);
+        } else {
+            return 'Algo no salbio bien';
+            $conexion->CerrarConexion($con);
+        }
+    }
+    public function Busca_Conincidir_aut($num_autoridad){
+        include_once 'conexion.php';
+        $conexion = new ConexionSQL();
+        $con = $conexion->ObtenerConexionBD();
+        $query = "SELECT * FROM Autoridad WHERE num_Autoridad= $num_autoridad ";
+        $prepare = sqlsrv_query($con, $query);
+        if ($prepare == true) {
+            return 'Se registro la autoridad Exitosamente';
             $conexion->CerrarConexion($con);
         } else {
             return 'Algo no salbio bien';
