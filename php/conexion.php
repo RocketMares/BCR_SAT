@@ -7,8 +7,7 @@ class ConexionSQL
         $BD_NAME = 'ControlSAT';
         $USER = 'Analisis';
         $pass = 'Malitos20';
-         $ServerName = '99.85.24.8';
-        //$ServerName = 'M299MOCE7194C03';
+        $ServerName = 'DESKTOP-4Q2P8VT\SQLEXPRESS';
         $connectionInfo = ['Database' => "$BD_NAME",
          'CharacterSet' => 'UTF-8', 'UID' => "$USER", 'PWD' => "$pass", ];
         //Se prepara la conexi�n
